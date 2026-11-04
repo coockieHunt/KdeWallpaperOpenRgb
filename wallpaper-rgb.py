@@ -14,9 +14,8 @@ INTERVAL = 3000 # default 3000 for 5 minutes
 OPENRGB_SERVER = "127.0.0.1:6742"
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 
-
+# Log a message with a timestamp.
 def log(message):
-    """Write a timestamped message to standard output."""
     prefix = f"[{time.strftime('%H:%M:%S')}] "
     message = " ".join(str(message).split())
     sys.stdout.write(prefix + message + "\r\n")
