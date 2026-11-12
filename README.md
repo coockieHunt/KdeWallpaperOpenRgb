@@ -17,7 +17,8 @@
 ## Requirements
 
 - Linux running KDE Plasma
-- Python 3 and [Pillow](https://python-pillow.org/)
+- Python 3.10 or newer
+- [Pillow](https://python-pillow.org/)
 - OpenRGB and its `openrgb` command-line tool
 - An OpenRGB-compatible device
 
@@ -28,10 +29,10 @@ your password.
 
 ## Install and run
 
-Install Pillow, then start the script:
+Install the Python dependencies, then start the script:
 
 ```bash
-python3 -m pip install Pillow
+python3 -m pip install -r requirements.txt
 python3 wallpaper-rgb.py
 ```
 
@@ -40,26 +41,29 @@ Keep the script running to continue changing wallpapers and colors. Stop it with
 
 ## Configuration
 
-Edit the settings near the top of `wallpaper-rgb.py`:
+On first run, the script creates `~/.config/wallpaper-rgb/state.json` with
+these default settings:
 
-```python
-WALL_DIR = Path("/mnt/perso/Images/walpaper")
-INTERVAL = 3000
-OPENRGB_SERVER = "127.0.0.1:6742"
+```json
+{
+  "wall_dir": "/mnt/perso/Images/walpaper",
+  "interval": 600
+}
 ```
 
-- Set `WALL_DIR` to the folder containing your wallpapers.
-- `INTERVAL` is in seconds. The current value, `3000`, means 50 minutes; use
-  `300` for a five-minute interval.
-- Set `OPENRGB_SERVER` if your OpenRGB server uses a different address or port.
+- Set `wall_dir` to the folder containing your wallpapers.
+- `interval` is in seconds. The default value, `600`, means 10 minutes.
+- Change `OPENRGB_SERVER` near the top of `wallpaper-rgb.py` if your server
+  uses a different address or port.
 
+Run `python3 wallpaper-rgb.py config` to change the settings interactively.
 The script currently controls OpenRGB device `0`. If that is not the device you
 want, change the `--device` value in `set_color_raw()` to the device number
 shown by `openrgb --list-devices`.
 
 ## Troubleshooting
 
-- **No images found:** Check that `WALL_DIR` exists and contains supported image
+- **No images found:** Check that `wall_dir` exists and contains supported image
   files.
 - **Wallpaper does not change:** Make sure you are running KDE Plasma and that
   `plasma-apply-wallpaperimage` is available.
