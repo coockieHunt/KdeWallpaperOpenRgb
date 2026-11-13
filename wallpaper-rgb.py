@@ -16,6 +16,7 @@ from PIL import Image
 DEFAULTS = {
     "wall_dir": "/mnt/perso/Images/walpaper",
     "interval": 600,
+    "attempts_openRgb_serveur": 10
 }
 OPENRGB_SERVER = "127.0.0.1:6742"
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
@@ -121,7 +122,9 @@ class OpenRGB:
 
     # check if openRgb is run
     def ensure_openrgb_server(self):
-        attempts = 20
+        cfg = load_config()
+        attempts = cfg['attempts_openRgb_serveur']
+
         log("INFO: Check OpenRGB server...")
         if self.openrgb_server_ready():
             log("OK: OpenRGB server is ok")
@@ -143,6 +146,11 @@ class OpenRGB:
 
         raise SystemExit("ERROR: OpenRGB server is unavailable; wallpaper was not changed.")
 
+    # kill server
+    def stop_server(self):
+        log("INFO: Stopping OpenRGB server (root)...")
+        run(["sudo", "pkill", "openrgb"])
+        log("OK: OpenRGB server stopped.")
 
 # ------ WALLPAPER
 def set_wallpaper(image_path):
@@ -263,6 +271,7 @@ def main():
 
             time.sleep(cfg["interval"])
     finally:
+        openrgb.stop_server()
         pass
 
 
